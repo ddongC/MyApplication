@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/calc" />
             <option value="$PROJECT_DIR$/calc20" />
+            <option value="$PROJECT_DIR$/dialog" />
           </set>
         </option>
       </GradleProjectSettings>
