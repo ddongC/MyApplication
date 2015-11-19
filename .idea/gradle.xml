@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/dialog" />
             <option value="$PROJECT_DIR$/diaryreport" />
             <option value="$PROJECT_DIR$/file" />
+            <option value="$PROJECT_DIR$/intent" />
           </set>
         </option>
       </GradleProjectSettings>
