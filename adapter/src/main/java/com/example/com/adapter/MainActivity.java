@@ -3,8 +3,12 @@ package com.example.com.adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,23 +16,33 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
 
+    List<ResolveInfo> apps;
+    PackageManager pm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("그리드 뷰 영화 포스터");
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
+        pm = getPackageManager();
+        apps = pm.queryIntentActivities(mainIntent, 0);
         final GridView gv = (GridView)findViewById(R.id.gridView1);
         MyGridAdapter gAdapter = new MyGridAdapter(this);
         gv.setAdapter(gAdapter);
     }
 
     public class MyGridAdapter extends BaseAdapter {
+        LayoutInflater inflater;
         Context context;
         Integer[] posterID = {
                 R.drawable.movie0, R.drawable.movie1, R.drawable.movie2,
@@ -41,8 +55,10 @@ public class MainActivity extends Activity {
                 "TITANIC", "Malabar Princess", "MATILDA", "Swinging Barmaids"
         };
 
+
         public MyGridAdapter(Context c) {
             context = c;
+            inflater = LayoutInflater.from(context);
         }
 
         public int getCount() {
@@ -50,36 +66,40 @@ public class MainActivity extends Activity {
         }
 
         public Object getItem(int arg0) {
-            return null;
-        }
-
-        public long getItemId(int arg0) {
             return 0;
         }
 
+        public long getItemId(int arg0) {
+            return  0;
+        }
+
         public View getView(int position, View convertView, ViewGroup parent) {
+           View view = inflater.inflate(R.layout.dialog, null);
 
-            ImageView imageview = new ImageView(context);
-            imageview.setLayoutParams(new GridView.LayoutParams(100, 150));
-            imageview.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageview.setPadding(5, 5, 5, 5);
-            imageview.setImageResource(posterID[position]);
+            ImageView imageView = (ImageView)view.findViewById(R.id.ivPoster);
+            TextView textView = (TextView)view.findViewById(R.id.ivPosterName);
+
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setPadding(5, 5, 5, 5);
+
             final int pos = position;
+            imageView.setImageResource(posterID[pos]);
+            textView.setText(posterName[pos]);
 
-            imageview.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    View dilogView = (View) View.inflate(MainActivity.this, R.layout.dialog, null);
+                    View dialogView = (View) View.inflate(MainActivity.this, R.layout.dialog, null);
                     AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                    ImageView ivPoster = (ImageView) dilogView.findViewById(R.id.ivPoster);
+                    ImageView ivPoster = (ImageView) dialogView.findViewById(R.id.ivPoster);
                     ivPoster.setImageResource(posterID[pos]);
                     dlg.setTitle(posterName[pos]);
                     dlg.setIcon(R.drawable.images);
-                    dlg.setView(dilogView);
+                    dlg.setView(dialogView);
                     dlg.setNegativeButton("닫기", null);
                     dlg.show();
                 }
             });
-            return imageview;
+            return view;
         }
     }
 
