@@ -36,6 +36,10 @@ public class MainActivity extends Activity {
                 R.drawable.movie6, R.drawable.movie7, R.drawable.movie8,
                 R.drawable.movie9
         };
+        String[] posterName = {
+                "PAWFASSIONAL", "ROCKY", "THE SHINING", "Feng Shui", "ROBOCOP", "GHOST WRITER",
+                "TITANIC", "Malabar Princess", "MATILDA", "Swinging Barmaids"
+        };
 
         public MyGridAdapter(Context c) {
             context = c;
@@ -68,7 +72,7 @@ public class MainActivity extends Activity {
                     AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
                     ImageView ivPoster = (ImageView) dilogView.findViewById(R.id.ivPoster);
                     ivPoster.setImageResource(posterID[pos]);
-                    dlg.setTitle("큰 포스터");
+                    dlg.setTitle(posterName[pos]);
                     dlg.setIcon(R.drawable.images);
                     dlg.setView(dilogView);
                     dlg.setNegativeButton("닫기", null);
