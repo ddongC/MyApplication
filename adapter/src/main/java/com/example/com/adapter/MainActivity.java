@@ -24,18 +24,12 @@ import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
 
-    List<ResolveInfo> apps;
-    PackageManager pm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("그리드 뷰 영화 포스터");
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        pm = getPackageManager();
-        apps = pm.queryIntentActivities(mainIntent, 0);
         final GridView gv = (GridView)findViewById(R.id.gridView1);
         MyGridAdapter gAdapter = new MyGridAdapter(this);
         gv.setAdapter(gAdapter);
@@ -74,11 +68,10 @@ public class MainActivity extends Activity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-           View view = inflater.inflate(R.layout.dialog, null);
+            View view = getLayoutInflater().inflate(R.layout.dialog, null);
 
             ImageView imageView = (ImageView)view.findViewById(R.id.ivPoster);
             TextView textView = (TextView)view.findViewById(R.id.ivPosterName);
-
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setPadding(5, 5, 5, 5);
 
