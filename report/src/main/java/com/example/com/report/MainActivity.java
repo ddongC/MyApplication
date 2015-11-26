@@ -1,8 +1,11 @@
 package com.example.com.report;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -63,6 +66,8 @@ public class MainActivity extends Activity {
                             cMonth = monthOfYear + 1;
                             cDay = dayOfMonth;
                             dateText.setText(Integer.toString(cYear) + "년 " + Integer.toString(cMonth) + "월 " + Integer.toString(cDay) + "일");
+                            fileName = cYear + "년_" + cMonth + "월_" + cDay + "일.txt";
+                            diary.setText(readDiary());
                         }
                     }, cYear, cMonth - 1, cDay);
                     datePickerDialog.show();
@@ -70,11 +75,10 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
-
+        //저장 기능
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fileName = cYear + "년_" + cMonth + "월_" + cDay + "일.txt";
                 File file = new File(filePath + "/" + fileName);
                 try {
                     FileOutputStream fos = new FileOutputStream(file, true);
@@ -93,7 +97,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // 옵션 메뉴 구현
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -104,16 +108,39 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
+        final float textSize = 36;
+        //다시 읽기 옵션 구현
         if (id == R.id.ReRead) {
+            diary.setText(readDiary());
             return true;
+        } else if(id == R.id.Delete) { //일기 삭제 기능 구현
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setTitle(dateText.getText() + "\n 일기를 삭제하시겠습니까?");
+            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                   File file = new File(filePath + "/" + fileName);
+                    file.delete();
+                    diary.setText(readDiary());
+                    Toast.makeText(getApplicationContext(), fileName + " 이 삭제됨", Toast.LENGTH_SHORT).show();
+                }
+            });
+            dlg.setNegativeButton("취소",null);
+            dlg.show();
+        } else if(id == R.id.ToBig) {//폰트 사이즈 조절부분 구현
+            diary.setTextSize(textSize * 4 / 3);
+
+        } else if(id == R.id.ToSmall) {
+            diary.setTextSize(textSize * 2 / 3);
+        } else if(id == R.id.ToMidium) {
+            diary.setTextSize(textSize);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    String readDiary() {
+    //파일을 읽어서 다이어리에 넘겨주는 함수
+   String readDiary() {
         String diaryContext = null;
         FileInputStream fis;
         File file = new File(filePath + "/" + fileName);
