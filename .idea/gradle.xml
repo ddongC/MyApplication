@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/file" />
             <option value="$PROJECT_DIR$/intent" />
             <option value="$PROJECT_DIR$/report" />
+            <option value="$PROJECT_DIR$/sqlite" />
           </set>
         </option>
       </GradleProjectSettings>
